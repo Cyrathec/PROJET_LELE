@@ -3,8 +3,12 @@
 int main(int argc, char *argv[]) {
 
     // Vérification de la présence d'un argument
-    if(argc != 2)
+    if(argc == 1)
         err("Entrez un argument", true);
+
+    // Vérification de la présence d'un SEUL argument
+    if(argc > 2)
+        err("N'entrez qu'un seul argument", true);
 
     std::string filename = argv[1];
 
@@ -18,7 +22,7 @@ int main(int argc, char *argv[]) {
 
     // Vérification de l'ouverture du fichier
     if(!instance.is_open())
-        err("Le fichier n'a pas pu être ouvert");
+        err("Le fichier de lecture n'a pas pu être ouvert");
 
     std::string line;
 
@@ -35,6 +39,32 @@ int main(int argc, char *argv[]) {
     // Récupération des capteurs pour chaque cible
     int **cibles = (int **)malloc(m * sizeof(int*));
     getCibles(cibles, &instance, m);
+
+    // Fermeture du fichier
+    instance.close();
+    if(instance.is_open())
+        err("Le fichier de lecture n'a pas pu être fermé", false);
+
+    // Création et ouverture d'un fichier de sortie ofstream
+    std::string outname = GetName(argv[1])+".lp";
+    std::ofstream out;
+    out.open(outname);
+
+    // Vérification de l'ouverture du fichier
+    if(!out.is_open())
+        err("Le fichier de sortie n'a pas pu être ouvert");
+
+    out << "Minimize\n";
+    out << " z: \n";
+    out << "Subject To\n";
+    out << " coût: \n";
+    out << "Generals\n";
+    out << "Binaries\n";
+
+    // Fermeture du fichier
+    out.close();
+    if(out.is_open())
+        err("Le fichier de lecture n'a pas pu être fermé", false);
 
     return 0;
 
@@ -67,7 +97,7 @@ void getCost(int *cost, std::ifstream *instance, int n){
             line = line.substr(line.find_first_of(" ") + 1, line.length());
 
         }
-        
+
     }
 }
 
@@ -75,7 +105,7 @@ void getCibles(int **cibles, std::ifstream *instance, int m){
 
     std::string line;
 
-    for (int i = 1; i < m; i++){
+    for (int i = 1; i <= m; i++){
 
         std::getline(*instance, line);
         line = line.substr(1, line.length() -1); // Suppréssion des espace avant et après
