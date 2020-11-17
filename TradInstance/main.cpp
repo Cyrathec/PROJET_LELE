@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
 
     // Récupération des capteurs pour chaque cible
     int **cibles = (int **)malloc(m * sizeof(int*));
+    
     getCibles(cibles, &instance, m);
 
     // Fermeture du fichier
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
         err("Le fichier de lecture n'a pas pu être fermé", false);
 
     // Création et ouverture d'un fichier de sortie ofstream
-    std::string outname = GetName(argv[1])+".lp";
+    std::string outname = GetName(argv[1]);
     std::ofstream out;
     out.open(outname);
 
@@ -55,11 +56,30 @@ int main(int argc, char *argv[]) {
         err("Le fichier de sortie n'a pas pu être ouvert");
 
     out << "Minimize\n";
-    out << " z: \n";
+    out << " z:";
+    for (int i = 0; i < n; i++){
+        if(i == 0)
+            out << " " << cost[i] << " x" << i + 1;
+        else
+            out << " + " << cost[i] << " x" << i + 1;
+    }
+    out << "\n";
     out << "Subject To\n";
-    out << " coût: \n";
+    for (int i = 0; i < m; i++) {
+        for (int j = 1; j <= cibles[i][0]; j++) {
+            if (j == 1)
+                out << " x" << cibles[i][j];
+            else 
+                out << " + x" << cibles[i][j];
+        }
+        out << " >= 1\n";
+    }
     out << "Generals\n";
     out << "Binaries\n";
+    for (int i = 0; i < n; i++){
+        out << " x" << i + 1 << "\n";
+    }
+    out << "End";
 
     // Fermeture du fichier
     out.close();
@@ -134,7 +154,7 @@ void getCibles(int **cibles, std::ifstream *instance, int m){
                 if(line.length() == 0)
                     break;
 
-                cibles[i - 1][j * 12 + k] = std::stoi(line.substr(0, line.find_first_of(" ")));
+                cibles[i - 1][j * 12 + k + 1] = std::stoi(line.substr(0, line.find_first_of(" ")));
                 line = line.substr(line.find_first_of(" ") + 1, line.length());
 
             }

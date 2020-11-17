@@ -39,14 +39,12 @@ std::string myName(){
 
 std::string GetName(std::string file){
 
-    int n = file.find_last_of('\\', file.length());
-
-    file = file.substr(n + 1, file.length());
-
-    n = file.find_last_of('.', file.length());
+    int n = file.find_last_of('.', file.length());
 
     if(n > 0)
         file = file.substr(0, n);
+
+    file = file+".lp";
 
     return file;
 
