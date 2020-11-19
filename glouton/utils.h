@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <string>
+#include <vector>
 
 #include <bits/stdc++.h> 
 #include <iostream> 

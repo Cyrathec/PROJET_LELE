@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "Solution.h"
 
-void getCost(int *cost, std::ifstream *instance, int n);
-void getCibles(int **cibles, std::ifstream *instance, int m);
+std::vector<int> getCost(std::ifstream *instance, int n);
+std::vector<std::vector<int>> getCibles(std::ifstream *instance, int m);
 
 #endif // MAIN_H
