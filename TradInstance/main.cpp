@@ -33,13 +33,10 @@ int main(int argc, char *argv[]) {
     int n = std::stoi(line.substr(line.find_first_of(" ") + 1, line.length()));
 
     // Récupération du coûts de capteurs
-    int *cost = (int*) malloc(n * sizeof(int));
-    getCost(cost, &instance, n);
+    std::vector<int> cost = getCost(&instance, n);
 
     // Récupération des capteurs pour chaque cible
-    int **cibles = (int **)malloc(m * sizeof(int*));
-    
-    getCibles(cibles, &instance, m);
+    std::vector<std::vector<int>> cibles = getCibles(&instance, m);
 
     // Fermeture du fichier
     instance.close();
@@ -59,18 +56,18 @@ int main(int argc, char *argv[]) {
     out << " z:";
     for (int i = 0; i < n; i++){
         if(i == 0)
-            out << " " << cost[i] << " x" << i + 1;
+            out << " " << cost.at(i) << " x" << i + 1;
         else
-            out << " + " << cost[i] << " x" << i + 1;
+            out << " + " << cost.at(i) << " x" << i + 1;
     }
     out << "\n";
     out << "Subject To\n";
     for (int i = 0; i < m; i++) {
-        for (int j = 1; j <= cibles[i][0]; j++) {
-            if (j == 1)
-                out << " x" << cibles[i][j];
+        for (int j = 0; j < cibles.at(i).size(); j++) {
+            if (j == 0)
+                out << " x" << cibles.at(i).at(j);
             else 
-                out << " + x" << cibles[i][j];
+                out << " + x" << cibles.at(i).at(j);
         }
         out << " >= 1\n";
     }
@@ -89,8 +86,9 @@ int main(int argc, char *argv[]) {
 
 }
 
-void getCost(int *cost, std::ifstream *instance, int n){
+std::vector<int> getCost(std::ifstream *instance, int n){
 
+    std::vector<int> cost;
     std::string line;
 
     // Calcule du nombre de boucles
@@ -112,28 +110,30 @@ void getCost(int *cost, std::ifstream *instance, int n){
             if(line.length() == 0)
                 break;
 
-            cost[i * 12 + j] = std::stoi(line.substr(0, line.find_first_of(" ")));
+            cost.push_back(std::stoi(line.substr(0, line.find_first_of(" "))));
             line = line.substr(line.find_first_of(" ") + 1, line.length());
 
         }
 
     }
+
+    return cost;
+
 }
 
-void getCibles(int **cibles, std::ifstream *instance, int m){
+std::vector<std::vector<int>> getCibles(std::ifstream *instance, int m){
 
+    std::vector<std::vector<int>> cibles;
+    std::vector<int> cible;
     std::string line;
 
-    for (int i = 1; i <= m; i++){
+    for (int i = 0; i < m; i++){
 
         std::getline(*instance, line);
         line = line.substr(1, line.length() -1); // Suppréssion des espace avant et après
 
         // récupère le nombre de capteurs
         int nbc = std::stoi(line);
-
-        cibles[i - 1] = (int*)malloc((nbc + 1) * sizeof(int));
-        cibles[i - 1][0] = nbc;
 
         // Calcule du nombre de boucles
         int count = nbc / 12;
@@ -153,13 +153,18 @@ void getCibles(int **cibles, std::ifstream *instance, int m){
                 if(line.length() == 0)
                     break;
 
-                cibles[i - 1][j * 12 + k + 1] = std::stoi(line.substr(0, line.find_first_of(" ")));
+                cible.push_back(std::stoi(line.substr(0, line.find_first_of(" "))));
                 line = line.substr(line.find_first_of(" ") + 1, line.length());
 
             }
 
         }
 
+        cibles.push_back(cible);
+        cible.clear();
+
     }
     
+    return cibles;
+
 }
