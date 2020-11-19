@@ -2,23 +2,47 @@
 
 
 
-void C_Solution::CalculeCout(){
+int C_Solution::CalculeCout(){
   S_Cout = 0;
   for(int i = 0; i < S_nbr_capteurs; i++){
     S_Cout += S_Xi[i]*S_Tab_Cout[i];
   }
+  return S_Cout;
 }
 
 int C_Solution::Heuristique(){
+  CalculeCiblesCouvertes();
+  std::vector<float> Score;
+  int Index = 0;
   for( int i = 0; i < S_nbr_capteurs ; i++){
-    for( int j = 0 ; j < S_nbr_cibles ; j++){
-      
+    Score.push_back(0.0f);
+    for( int j = 0 ; j < S_Tab_Vji.at(i).size() ; j++){
+      if (S_Cibles_Couvertes.at(S_Tab_Vji.at(i).at(j) - 1) == 0 ){
+        Score.at(i)++;
+      }
     }
+    Score.at(i) = (float) Score.at(i) / S_Tab_Cout.at(i);
+    if (Score.at(i) > Score.at(Index)){
+      Index = i;
+    }
+
   }
 
-  return 0 ;
+  return Index ;
 }
 
+int C_Solution::AlgorythmeGlouton(){
+  while ( S_M > 0){
+    int i = Heuristique();
+    S_Xi.at(i) = 1;
+    S_M = S_nbr_cibles;
+    CalculeCiblesCouvertes();
+    for (int j = 0 ; j < S_nbr_cibles ; j++){
+      S_M -= S_Cibles_Couvertes.at(j);
+    }
+  }
+  return CalculeCout();
+}
 void C_Solution::CalculeCiblesCouvertes(){
 
   S_Cibles_Couvertes.clear();
@@ -35,7 +59,7 @@ void C_Solution::CalculeCiblesCouvertes(){
 
     }
 
-  }  
+  }
 
 }
 
@@ -80,6 +104,7 @@ C_Solution::C_Solution(int p_nbr_capteurs, int p_nbr_cibles, std::vector<int> p_
   S_nbr_cibles = p_nbr_cibles;
   S_M = p_nbr_cibles;
   S_Tab_Vij = p_Tab_Vij;
+  CreationTabVji();
 }
 
 C_Solution::C_Solution(){

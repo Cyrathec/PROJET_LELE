@@ -18,11 +18,12 @@ protected:
   //Methode de la classe
   void CalculeCiblesCouvertes();
   void CreationTabVji();
+  int Heuristique();
   C_Solution();
 public:
-  void CalculeCout();
-  void SetXi(int p_index);
-  int Heuristique();
+  int CalculeCout();
+  //void SetXi(int p_index);
+  int AlgorythmeGlouton();
   //constructeur de la classe
   C_Solution(int p_nbr_capteurs, int p_nbr_cibles, std::vector<int> p_Tab_Cout, std::vector<std::vector<int>> p_Tab_Vij);
 
