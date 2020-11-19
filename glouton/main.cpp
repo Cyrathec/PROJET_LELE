@@ -46,8 +46,10 @@ int main(int argc, char *argv[]) {
     if(instance.is_open())
         err("Le fichier de lecture n'a pas pu être fermé", false);
 
-    C_Solution S = C_Solution(n,cost);
-    printf("FAIM");
+
+    // Algorythme glouton
+    C_Solution S = C_Solution(n,m,cost);
+    
 
 
     return 0;
