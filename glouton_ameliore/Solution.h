@@ -28,4 +28,5 @@ public:
   C_Solution(int p_nbr_capteurs, int p_nbr_cibles, std::vector<int> p_Tab_Cout, std::vector<std::vector<int>> p_Tab_Vij);
 
 };
- #endif
+
+#endif
