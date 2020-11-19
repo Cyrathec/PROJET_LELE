@@ -4,11 +4,11 @@ int main(int argc, char *argv[]) {
 
     // Vérification de la présence d'un argument
     if(argc == 1)
-        err("Entrez un argument", true);
+        err("Entrez un argument", true, true);
 
     // Vérification de la présence d'un SEUL argument
     if(argc > 2)
-        err("N'entrez qu'un seul argument", true);
+        err("N'entrez qu'un seul argument", true, true);
 
     std::string filename = argv[1];
 
