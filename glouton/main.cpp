@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 
 
     // Algorythme glouton
-    C_Solution S = C_Solution(n, m, cost);
+    C_Solution S = C_Solution(n, m, cost, cibles);
 
     return 0;
 

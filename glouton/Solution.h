@@ -13,8 +13,8 @@ protected:
   std::vector<std::vector<int>> S_Tab_Vij; // Tableau des capteurs qui couvrent les cibles
   std::vector<std::vector<int>> S_Tab_Vji; // Tableau des cibles couverte par les capteurs
   std::vector<int> S_Tab_Cout; // Couts des capteurs
-  std::vector<int> S_Xi; // Capteurs déployés
-  std::vector<int> S_Cibles_Couvertes;
+  std::vector<int> S_Xi; // Liste des capteurs déployés (0 = non | 1 = oui)
+  std::vector<int> S_Cibles_Couvertes; // Liste des cibles couvertes (0 = non | 1 = oui)
   //Methode de la classe
   void CalculeCiblesCouvertes();
   void CreationTabVji();
@@ -24,7 +24,7 @@ public:
   void SetXi(int p_index);
   int Heuristique();
   //constructeur de la classe
-  C_Solution(int p_nbr_capteurs, int p_nbr_cibles, std::vector<int> p_Tab_Cout);
+  C_Solution(int p_nbr_capteurs, int p_nbr_cibles, std::vector<int> p_Tab_Cout, std::vector<std::vector<int>> p_Tab_Vij);
 
 };
  #endif
