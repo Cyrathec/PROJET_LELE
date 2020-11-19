@@ -74,7 +74,6 @@ int main(int argc, char *argv[]) {
         }
         out << " >= 1\n";
     }
-    out << "Generals\n";
     out << "Binaries\n";
     for (int i = 0; i < n; i++){
         out << " x" << i + 1 << "\n";
