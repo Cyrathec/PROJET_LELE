@@ -10,7 +10,7 @@ else
 	propre = find . -type f -executable -delete
 endif
 
-TradInstance: main.o utils.o
+Glouton: main.o utils.o Solution.o
 	${CC} $^ -o $@ ${LIBS}
 
 %.o: %.c
