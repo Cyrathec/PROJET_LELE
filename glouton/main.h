@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include "utils.h"
+#include "Solution.h"
 
 void getCost(int *cost, std::ifstream *instance, int n);
 void getCibles(int **cibles, std::ifstream *instance, int m);

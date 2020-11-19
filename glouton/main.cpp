@@ -4,11 +4,11 @@ int main(int argc, char *argv[]) {
 
     // Vérification de la présence d'un argument
     if(argc == 1)
-        err("Entrez un argument", true);
+        err("Entrez un argument", true, true);
 
     // Vérification de la présence d'un SEUL argument
     if(argc > 2)
-        err("N'entrez qu'un seul argument", true);
+        err("N'entrez qu'un seul argument", true, true);
 
     std::string filename = argv[1];
 
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     std::string line;
 
     // Récupération de M et N
-	std::getline(instance, line);    
+	std::getline(instance, line);
     line = line.substr(1, line.length() -1); // Suppréssion des espace avant M et après n
     int m = std::stoi(line.substr(0, line.find_first_of(" ")));
     int n = std::stoi(line.substr(line.find_first_of(" ") + 1, line.length()));
@@ -38,13 +38,17 @@ int main(int argc, char *argv[]) {
 
     // Récupération des capteurs pour chaque cible
     int **cibles = (int **)malloc(m * sizeof(int*));
-    
+
     getCibles(cibles, &instance, m);
 
     // Fermeture du fichier
     instance.close();
     if(instance.is_open())
         err("Le fichier de lecture n'a pas pu être fermé", false);
+
+    C_Solution S = C_Solution(n,cost);
+    printf("FAIM");
+
 
     return 0;
 
@@ -122,5 +126,5 @@ void getCibles(int **cibles, std::ifstream *instance, int m){
         }
 
     }
-    
+
 }
