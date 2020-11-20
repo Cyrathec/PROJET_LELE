@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
     // Algorythme glouton
     C_Solution S = C_Solution(n, m, cost, cibles);
-    printf(" Le Cout est %d",S.AlgorythmeGloutonAmeliore());
+    printf(" Le Cout est %d",S.AlgorythmeGlouton());
     return 0;
 
 }

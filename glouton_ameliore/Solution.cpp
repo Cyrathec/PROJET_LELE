@@ -9,6 +9,15 @@ int C_Solution::CalculeCout(){
   }
   return S_Cout;
 }
+int C_Solution::Heuristique2(){
+  int Index = 0;
+  for (int i = 0; i < S_Capteurs_Inutiles.size(); i++) {
+    if (S_Tab_Cout.at(S_Capteurs_Inutiles.at(i)) > S_Tab_Cout.at(S_Capteurs_Inutiles.at(Index))){
+      Index = i;
+    }
+  }
+  return S_Capteurs_Inutiles.at(Index);
+}
 
 int C_Solution::Heuristique(){
   CalculeCiblesCouvertes();
@@ -30,6 +39,24 @@ int C_Solution::Heuristique(){
 
   return Index ;
 }
+void C_Solution::CalculeRedondance(){
+  S_Capteurs_Inutiles.clear();
+  for (int i = 0 ; i < S_nbr_capteurs ; i++ ){
+    if (S_Xi.at(i) == 1) {
+      for (int j = 0; j < S_Tab_Vji.at(i).size(); j++) {
+        //printf ("VJI = %d\n",S_Tab_Vji.at(i).at(j));
+        for (int k = 0; k < S_Tab_Vij.at(S_Tab_Vji.at(i).at(j) - 1).size(); k++) {
+          //printf(" i= %d ,j = %d,k = %d\n",i,j,k);
+          if (i != S_Tab_Vij.at(S_Tab_Vji.at(i).at(j)- 1).at(k) && S_Xi.at(S_Tab_Vij.at(S_Tab_Vji.at(i).at(j) - 1).at(k) - 1) == 1) {
+            S_Capteurs_Inutiles.push_back(i);
+          }
+       }
+      }
+    }
+  }
+  S_R = S_Capteurs_Inutiles.size();
+}
+
 
 int C_Solution::AlgorythmeGlouton(){
   while ( S_M > 0){
@@ -43,6 +70,18 @@ int C_Solution::AlgorythmeGlouton(){
   }
   return CalculeCout();
 }
+
+int C_Solution::AlgorythmeGloutonAmeliore(){
+  AlgorythmeGlouton();
+  CalculeRedondance();
+  while(S_R > 0){
+    int H2 = Heuristique2();
+    S_Xi.at(H2) = 0;
+    CalculeRedondance();
+  }
+  return CalculeCout();
+}
+
 void C_Solution::CalculeCiblesCouvertes(){
 
   S_Cibles_Couvertes.clear();
