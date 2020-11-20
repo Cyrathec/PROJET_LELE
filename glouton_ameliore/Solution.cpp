@@ -41,16 +41,24 @@ int C_Solution::Heuristique(){
 }
 void C_Solution::CalculeRedondance(){
   S_Capteurs_Inutiles.clear();
-  for (int i = 0 ; i < S_nbr_capteurs ; i++ ){
+  for (int i = 0 ; i < S_nbr_capteurs ; i++ ) {
     if (S_Xi.at(i) == 1) {
+      int test = 1;
       for (int j = 0; j < S_Tab_Vji.at(i).size(); j++) {
-        //printf ("VJI = %d\n",S_Tab_Vji.at(i).at(j));
+        int test2 = 0;
         for (int k = 0; k < S_Tab_Vij.at(S_Tab_Vji.at(i).at(j) - 1).size(); k++) {
-          //printf(" i= %d ,j = %d,k = %d\n",i,j,k);
-          if (i != S_Tab_Vij.at(S_Tab_Vji.at(i).at(j)- 1).at(k) && S_Xi.at(S_Tab_Vij.at(S_Tab_Vji.at(i).at(j) - 1).at(k) - 1) == 1) {
-            S_Capteurs_Inutiles.push_back(i);
+          if (S_Xi.at(S_Tab_Vij.at(S_Tab_Vji.at(i).at(j)- 1).at(k) - 1) == 1) {
+            if(i + 1 != S_Tab_Vij.at(S_Tab_Vji.at(i).at(j)- 1).at(k)){
+              test2 = 1;
+            }
           }
-       }
+        }
+        if(test2 == 0) {
+          test = 0;
+        }
+      }
+      if(test == 1) {
+        S_Capteurs_Inutiles.push_back(i);
       }
     }
   }
